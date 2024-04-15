@@ -19,7 +19,6 @@ const getUserWithEmail = function(email) {
         .then((result) => {
             const user = result.rows[0];
             if (user) {
-                console.log(user);
                 return user;
             }
             return null;
@@ -37,7 +36,7 @@ const getUserWithEmail = function(email) {
  */
 const getUserWithId = function(id) {
     return pool
-        .query(`SELECT name FROM users WHERE id = $1`, [id])
+        .query(`SELECT * FROM users WHERE id = $1`, [id])
         .then((result) => {
             const user = result.rows[0];
             if (user) {
@@ -48,7 +47,6 @@ const getUserWithId = function(id) {
         .catch((err) => {
             console.log(err.message);
         });
-    // return Promise.resolve(users[id]);
 };
 
 /**
@@ -60,15 +58,11 @@ const addUser = function(user) {
     return pool
     .query(`INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *`, [user.name, user.email, user.password])
     .then((result) => {
-        return result.rows;
+        return result.rows[0];
     })
     .catch((err) => {
         console.log(err.message);
     });
-    // const userId = Object.keys(users).length + 1;
-    // user.id = userId;
-    // users[userId] = user;
-    // return Promise.resolve(user);
 };
 
 /// Reservations
@@ -79,7 +73,21 @@ const addUser = function(user) {
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function(guest_id, limit = 10) {
-    return getAllProperties(null, 2);
+    return pool
+    .query(`SELECT reservations.*, properties.title, properties.cost_per_night, AVG(rating) AS average_rating
+    FROM reservations
+    JOIN properties ON property_id = properties.id
+    JOIN property_reviews ON property_reviews.reservation_id = reservations.id
+    WHERE reservations.guest_id = $1
+    GROUP BY reservations.id, properties.title, properties.cost_per_night
+    ORDER BY reservations.start_date
+    LIMIT $2`, [guest_id, limit])
+    .then((result) => {
+        return result.rows[0];
+    })
+    .catch((err) => {
+        console.error(err.message);
+    });
 };
 
 /// Properties
