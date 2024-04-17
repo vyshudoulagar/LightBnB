@@ -5,9 +5,9 @@ This database application project developed as a part of Lighthouse Labs Web dev
 
 ## Preview
 
-!["Screenshot of LightBnB home page"]()
-!["Screenshot of LightBnB login page"]()
-!["Screenshot of LightBnB search listing page"]()
+!["Screenshot of LightBnB home page"](https://github.com/vyshudoulagar/LightBnB/blob/main/docs/homepage.png)
+!["Screenshot of LightBnB login page"](https://github.com/vyshudoulagar/LightBnB/blob/main/docs/loginpage.png)
+!["Screenshot of LightBnB search listing page"](https://github.com/vyshudoulagar/LightBnB/blob/main/docs/searchlisting.png)
 
 ## Usage
 
